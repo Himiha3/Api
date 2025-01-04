@@ -6,7 +6,7 @@ exports.config = {
   description: "Download All video by link and return detailed data",
   method: "post",
   category: "utility",
-  link: ["/fbDownload"]
+  link: ["/autolink"]
 };
 
 exports.initialize = async function ({ req, res }) {
