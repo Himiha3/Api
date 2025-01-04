@@ -2,26 +2,29 @@ const axios = require("axios");
 
 exports.config = {
   name: "autolink",
-  author: "VLjnh",
-  description: "Download All video by link and return detailed data",
+  author: "Your_Name",
+  description: "Download Facebook video by link and return detailed data",
   method: "post",
-  category: "utility",
+  category: "downloader",
   link: ["/autolink"]
 };
 
 exports.initialize = async function ({ req, res }) {
   try {
-    const { url } = req.body; // Lấy URL từ request
+    const { url } = req.body;
 
     if (!url) {
       return res.json({ success: false, message: "No URL provided", status: 400 });
     }
 
-    // API URL với link video và API key
     const apiUrl = `https://api.azig.dev/media/downAIO?url=${url}&apikey=s0jtR16BKW`;
 
-    // Gửi request đến API
+    // Fetch data from API
     const response = await axios.get(apiUrl);
+
+    // Log raw API response for debugging
+    console.log("API Response:", response.data);
+
     const videoData = response.data;
 
     if (!videoData.success || !videoData.data) {
@@ -32,7 +35,7 @@ exports.initialize = async function ({ req, res }) {
       });
     }
 
-    // Chuẩn bị dữ liệu trả về
+    // Prepare the result
     const result = {
       success: true,
       data: {
@@ -55,6 +58,10 @@ exports.initialize = async function ({ req, res }) {
     return res.json(result);
   } catch (error) {
     console.error("Error:", error.message);
+
+    // Log error details
+    console.error("Error details:", error.response?.data || error);
+
     return res.json({
       success: false,
       message: "Internal server error",
